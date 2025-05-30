@@ -87,6 +87,7 @@ extension MoviesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Se o teclado está visível, apenas o esconde
         if searchBar.isFirstResponder {
+            searchBar.showsCancelButton = false
             searchBar.resignFirstResponder()
             return
         }
@@ -112,6 +113,19 @@ extension MoviesViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
         searchBar.resignFirstResponder()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        isSearchActive = false
+        searchBar.resignFirstResponder()
+        tableView.reloadData()
     }
 }
