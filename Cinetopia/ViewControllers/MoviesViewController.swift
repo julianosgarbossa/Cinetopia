@@ -85,6 +85,13 @@ extension MoviesViewController: UITableViewDataSource {
 
 extension MoviesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Se o teclado está visível, apenas o esconde
+        if searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
+            return
+        }
+        
+        // Se o teclado não está visível, navega normalmente
         let movie = isSearchActive ? filteredMovies[indexPath.row] : shuffledMovies[indexPath.row]
         let movieDetailViewController = MovieDetailViewController(movie: movie)
         navigationController?.pushViewController(movieDetailViewController, animated: true)
@@ -102,5 +109,9 @@ extension MoviesViewController: UISearchBarDelegate {
             })
         }
         tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }
