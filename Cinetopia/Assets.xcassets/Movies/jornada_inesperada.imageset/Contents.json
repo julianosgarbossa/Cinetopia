@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "jornada_inesperada.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

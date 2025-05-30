@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "desolacao_de_smaug.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "sociedade_do_anel.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
