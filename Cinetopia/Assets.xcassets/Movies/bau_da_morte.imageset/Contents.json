@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "bau_da_morte.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

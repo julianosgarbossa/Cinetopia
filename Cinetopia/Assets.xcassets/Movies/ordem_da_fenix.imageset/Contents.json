@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ordem_da_fenix.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

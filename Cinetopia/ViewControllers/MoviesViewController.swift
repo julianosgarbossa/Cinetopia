@@ -8,7 +8,20 @@
 import UIKit
 
 class MoviesViewController: UIViewController {
+    
+    private var shuffledMovies = movies.shuffled()
+    private var filteredMovies: [Movie] = []
+    private var isSearchActive: Bool = false
 
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.placeholder = "Pesquisar"
+        searchBar.searchTextField.backgroundColor = .white
+        searchBar.delegate = self
+        return searchBar
+    }()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -41,23 +54,26 @@ class MoviesViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
+        navigationItem.setHidesBackButton(true, animated: false)
+        navigationItem.titleView = searchBar
         title = "Filmes populares"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.largeTitleTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor.white
         ]
-        navigationItem.setHidesBackButton(true, animated: true)
+        
     }
 }
 
 extension MoviesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return isSearchActive ? filteredMovies.count : shuffledMovies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell else { return UITableViewCell() }
-        cell.configureCell(movie: movies[indexPath.row])
+        let movie = isSearchActive ? filteredMovies[indexPath.row] : shuffledMovies[indexPath.row]
+        cell.configureCell(movie: movie)
         cell.selectionStyle = .none
         return cell
     }
@@ -69,7 +85,22 @@ extension MoviesViewController: UITableViewDataSource {
 
 extension MoviesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let movieDetailViewController = MovieDetailViewController(movie: movies[indexPath.row])
+        let movie = isSearchActive ? filteredMovies[indexPath.row] : shuffledMovies[indexPath.row]
+        let movieDetailViewController = MovieDetailViewController(movie: movie)
         navigationController?.pushViewController(movieDetailViewController, animated: true)
+    }
+}
+
+extension MoviesViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            isSearchActive = false
+        } else {
+            isSearchActive = true
+            filteredMovies = shuffledMovies.filter({ movie in
+                movie.title.lowercased().contains(searchText.lowercased())
+            })
+        }
+        tableView.reloadData()
     }
 }

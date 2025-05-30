@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "aguas_misteriosas.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
