@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class MovieDetailViewController: UIViewController {
     
@@ -27,7 +28,8 @@ class MovieDetailViewController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: movie.image)
+        let url = URL(string: movie.image)
+        imageView.kf.setImage(with: url, placeholder: UIImage(named: "photo"))
         imageView.layer.cornerRadius = 12
         imageView.layer.masksToBounds = true
         imageView.backgroundColor = .red
@@ -38,7 +40,7 @@ class MovieDetailViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        label.text = "Classificação dos usuários: \(movie.rating)"
+        label.text = "Classificação dos usuários: \(movie.rate)"
         label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         label.textAlignment = .center
         return label

@@ -9,10 +9,11 @@ import UIKit
 
 class MoviesViewController: UIViewController {
     
-    private var shuffledMovies = movies.shuffled()
+    private let movieService: MovieService = MovieService()
+    private var moviesAPI: [Movie] = []
     private var filteredMovies: [Movie] = []
     private var isSearchActive: Bool = false
-
+    
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -38,6 +39,10 @@ class MoviesViewController: UIViewController {
         self.addSubviews()
         self.setupConstraints()
         self.setupNavigationBar()
+        Task {
+            await self.fetchMovies()
+        }
+        
     }
     
     private func addSubviews() {
@@ -63,16 +68,25 @@ class MoviesViewController: UIViewController {
         ]
         
     }
+    
+    private func fetchMovies() async {
+        do {
+            moviesAPI = try await movieService.getMovies().shuffled()
+            self.tableView.reloadData()
+        } catch (let error) {
+            print(error)
+        }
+    }
 }
 
 extension MoviesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return isSearchActive ? filteredMovies.count : shuffledMovies.count
+        return isSearchActive ? filteredMovies.count : moviesAPI.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell else { return UITableViewCell() }
-        let movie = isSearchActive ? filteredMovies[indexPath.row] : shuffledMovies[indexPath.row]
+        let movie = isSearchActive ? filteredMovies[indexPath.row] : moviesAPI[indexPath.row]
         cell.configureCell(movie: movie)
         cell.selectionStyle = .none
         return cell
@@ -93,7 +107,7 @@ extension MoviesViewController: UITableViewDelegate {
         }
         
         // Se o teclado não está visível, navega normalmente
-        let movie = isSearchActive ? filteredMovies[indexPath.row] : shuffledMovies[indexPath.row]
+        let movie = isSearchActive ? filteredMovies[indexPath.row] : moviesAPI[indexPath.row]
         let movieDetailViewController = MovieDetailViewController(movie: movie)
         navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
@@ -105,7 +119,7 @@ extension MoviesViewController: UISearchBarDelegate {
             isSearchActive = false
         } else {
             isSearchActive = true
-            filteredMovies = shuffledMovies.filter({ movie in
+            filteredMovies = moviesAPI.filter({ movie in
                 movie.title.lowercased().contains(searchText.lowercased())
             })
         }
