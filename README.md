@@ -3,12 +3,12 @@
 O **Cinetopia** é um aplicativo iOS desenvolvido com **UIKit (ViewCode)** que permite aos usuários explorar filmes populares, pesquisar títulos e marcar seus favoritos. A interface é moderna, responsiva e centrada na experiência do usuário.
 
 <p align="center">
-  <img src="Assets/Tela_Home.jpeg" width="150"/>
-  <img src="Assets/Tela_Filmes.jpeg" width="150"/>
-  <img src="Assets/Tela_Filmes_Rolagem.jpeg" width="150"/>
-  <img src="Assets/Tela Filmes_Pesquisa.jpeg" width="150"/>
-  <img src="Assets/Tela_Filme_Detalhes.jpeg" width="150"/>
-  <img src="Assets/Tela_Favoritos.jpeg" width="150"/>
+  <img src="Assets/Tela_Home.png" width="150"/>
+  <img src="Assets/Tela_Filmes.png" width="150"/>
+  <img src="Assets/Tela_Filmes_Rolagem.png" width="150"/>
+  <img src="Assets/Tela Filmes_Pesquisa.png" width="150"/>
+  <img src="Assets/Tela_Filme_Detalhes.png" width="150"/>
+  <img src="Assets/Tela_Favoritos.png" width="150"/>
 </p>
 
 ## 🛠 Tecnologias Utilizadas
