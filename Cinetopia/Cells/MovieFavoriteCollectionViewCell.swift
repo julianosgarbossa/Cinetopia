@@ -25,14 +25,12 @@ class MovieFavoriteCollectionViewCell: UICollectionViewCell {
         imageView.backgroundColor = .red
         imageView.layer.cornerRadius = 12
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "teste")
         return imageView
     }()
     
     private lazy var movieTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Harry Potter e as Relíquias da Morte: Parte 2"
         label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         label.textColor = .white
         label.textAlignment = .center
