@@ -59,15 +59,16 @@ class HomeViewController: UIViewController {
     
     @objc
     private func buttonPressed(sender: UIButton) {
-        let moviesViewController = MoviesViewController()
-        navigationController?.pushViewController(moviesViewController, animated: true)
+        let tabBarController = TabBarController()
+        navigationController?.pushViewController(tabBarController, animated: true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
-        addSubviews()
-        setupConstraints()
+        self.addSubviews()
+        self.setupConstraints()
+        self.setupNavigationBar()
     }
     
     private func addSubviews() {
@@ -86,6 +87,10 @@ class HomeViewController: UIViewController {
             welcomeButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -64),
             welcomeButton.heightAnchor.constraint(equalToConstant: 64)
         ])
+    }
+    
+    private func setupNavigationBar() {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 }
 

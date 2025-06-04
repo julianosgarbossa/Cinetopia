@@ -33,6 +33,10 @@ class MoviesViewController: UIViewController {
         return tableView
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
@@ -59,14 +63,33 @@ class MoviesViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
+        // Esconde o botão de voltar
         navigationItem.setHidesBackButton(true, animated: false)
+
+        // Define a searchBar como título
         navigationItem.titleView = searchBar
         title = "Filmes populares"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.largeTitleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.white
-        ]
-        
+
+        // Aparência quando a navigation bar está travada no topo no momento do scroll
+        let standardAppearance = UINavigationBarAppearance()
+        standardAppearance.configureWithOpaqueBackground()
+        standardAppearance.backgroundColor = .tabBarBackground
+        standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        standardAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        // Aparência quando a navigation está no seu estado normal
+        let scrollEdgeAppearance = UINavigationBarAppearance()
+        scrollEdgeAppearance.configureWithTransparentBackground()
+        scrollEdgeAppearance.backgroundColor = .background
+        scrollEdgeAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        scrollEdgeAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        // Aplica os estilos na navigation bar
+        let navigationBar = navigationController?.navigationBar
+        navigationBar?.standardAppearance = standardAppearance
+        navigationBar?.scrollEdgeAppearance = scrollEdgeAppearance
+        navigationBar?.compactAppearance = standardAppearance
+        navigationBar?.prefersLargeTitles = true
     }
     
     private func fetchMovies() async {
@@ -89,6 +112,7 @@ extension MoviesViewController: UITableViewDataSource {
         let movie = isSearchActive ? filteredMovies[indexPath.row] : moviesAPI[indexPath.row]
         cell.configureCell(movie: movie)
         cell.selectionStyle = .none
+        cell.delegate = self
         return cell
     }
     
@@ -141,5 +165,21 @@ extension MoviesViewController: UISearchBarDelegate {
         isSearchActive = false
         searchBar.resignFirstResponder()
         tableView.reloadData()
+    }
+}
+
+extension MoviesViewController: MovieTableViewCellDelegate {
+    func didSelectedFavoriteButton(sender: UIButton) {
+        guard let cell = sender.superview?.superview as? MovieTableViewCell else { return }
+        
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        
+        let selectedMovie = isSearchActive ? filteredMovies[indexPath.row] : moviesAPI[indexPath.row]
+        
+        selectedMovie.changeSelectionStatus()
+        
+        MovieManager.shared.add(movie: selectedMovie)
+        
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
